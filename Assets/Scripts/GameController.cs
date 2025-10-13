@@ -1,42 +1,43 @@
-using UnityEngine;
+п»їusing UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections;
 
 public class ButtonController : MonoBehaviour
 {
-    [Header("Компоненти UI")]
-    public Image targetImage;
+    [Header("РљРѕРјРїРѕРЅРµРЅС‚Рё UI")]
+    public Image backgroundImage;
+    public Image characterImage;
     public TextMeshProUGUI displayText;
     public Animator targetAnimator;
 
-    [Header("Кнопки (опціонально)")]
+    [Header("РљРЅРѕРїРєРё (РѕРїС†С–РѕРЅР°Р»СЊРЅРѕ)")]
     public Button nextButton;
     public Button prevButton;
 
-    [Header("Контент для перемикання")]
-    public Sprite[] sprites;
+    [Header("РљРѕРЅС‚РµРЅС‚ РґР»СЏ РїРµСЂРµРјРёРєР°РЅРЅСЏ")]
+    public Sprite[] backgroundSprites;
+    public Sprite[] characterSprites;
     public string[] texts;
     public string[] animationTriggers;
 
-    [Header("Налаштування")]
+    [Header("РќР°Р»Р°С€С‚СѓРІР°РЅРЅСЏ")]
     public int currentIndex = 0;
 
     void Start()
     {
-        Debug.Log("ButtonController.Start — перевірка полів...");
-        Debug.Log($" targetImage = {(targetImage == null ? "NULL" : "ok")} , displayText = {(displayText == null ? "NULL" : "ok")}, sprites.Length = {(sprites == null ? 0 : sprites.Length)}");
+        Debug.Log("ButtonController.Start вЂ” РїРµСЂРµРІС–СЂРєР° РїРѕР»С–РІ...");
+        Debug.Log($" backgroundImage = {(backgroundImage == null ? "NULL" : "ok")} , characterImage = {(characterImage == null ? "NULL" : "ok")}, displayText = {(displayText == null ? "NULL" : "ok")}");
+        Debug.Log($" backgroundSprites.Length = {(backgroundSprites == null ? 0 : backgroundSprites.Length)}, characterSprites.Length = {(characterSprites == null ? 0 : characterSprites.Length)}, texts.Length = {(texts == null ? 0 : texts.Length)}");
 
-        // Підписка на кнопки як запасний варіант (ще раз перевірити, що кнопки працюють)
         if (nextButton != null)
         {
             nextButton.onClick.AddListener(OnNextButton);
-            Debug.Log("Підписано OnNextButton на nextButton");
+            Debug.Log("РџС–РґРїРёСЃР°РЅРѕ OnNextButton РЅР° nextButton");
         }
         if (prevButton != null)
         {
             prevButton.onClick.AddListener(OnPreviousButton);
-            Debug.Log("Підписано OnPreviousButton на prevButton");
+            Debug.Log("РџС–РґРїРёСЃР°РЅРѕ OnPreviousButton РЅР° prevButton");
         }
 
         UpdateContent();
@@ -44,61 +45,67 @@ public class ButtonController : MonoBehaviour
 
     public void OnNextButton()
     {
-        Debug.Log("OnNextButton натиснута. currentIndex = " + currentIndex);
-        if (sprites != null && sprites.Length > 0)
-            currentIndex = (currentIndex + 1) % sprites.Length;
-        else
-            currentIndex++;
+        Debug.Log("OnNextButton РЅР°С‚РёСЃРЅСѓС‚Р°. currentIndex = " + currentIndex);
+        currentIndex++;
         UpdateContent();
     }
 
     public void OnPreviousButton()
     {
-        Debug.Log("OnPreviousButton натиснута. currentIndex = " + currentIndex);
-        if (sprites != null && sprites.Length > 0)
-            currentIndex = (currentIndex - 1 + sprites.Length) % sprites.Length;
-        else
-            currentIndex = Mathf.Max(0, currentIndex - 1);
+        Debug.Log("OnPreviousButton РЅР°С‚РёСЃРЅСѓС‚Р°. currentIndex = " + currentIndex);
+        currentIndex = Mathf.Max(0, currentIndex - 1);
         UpdateContent();
     }
 
     private void UpdateContent()
     {
-        Debug.Log("UpdateContent() викликано. currentIndex = " + currentIndex);
+        Debug.Log("UpdateContent() РІРёРєР»РёРєР°РЅРѕ. currentIndex = " + currentIndex);
 
-        // Картинка
-        if (targetImage != null && sprites != null && sprites.Length > 0)
+        // Р¤РѕРЅРѕРІРµ Р·РѕР±СЂР°Р¶РµРЅРЅСЏ
+        if (backgroundImage != null && backgroundSprites != null && backgroundSprites.Length > 0)
         {
-            int idx = Mathf.Clamp(currentIndex, 0, sprites.Length - 1);
-            targetImage.sprite = sprites[idx];
-            Debug.Log(" Задано sprite index = " + idx + " (" + (sprites[idx] != null ? sprites[idx].name : "NULL SPRITE") + ")");
+            int idx = currentIndex % backgroundSprites.Length;
+            backgroundImage.sprite = backgroundSprites[idx];
+            Debug.Log(" Р—Р°РґР°РЅРѕ background sprite index = " + idx + " (" + (backgroundSprites[idx] != null ? backgroundSprites[idx].name : "NULL SPRITE") + ")");
         }
         else
         {
-            Debug.Log(" targetImage або sprites не готові (targetImage==null? " + (targetImage == null) + ", sprites==null? " + (sprites == null) + ")");
+            Debug.Log(" backgroundImage Р°Р±Рѕ backgroundSprites РЅРµ РіРѕС‚РѕРІС–");
         }
 
-        // Текст
+        // Р—РѕР±СЂР°Р¶РµРЅРЅСЏ РїРµСЂСЃРѕРЅР°Р¶Р°
+        if (characterImage != null && characterSprites != null && characterSprites.Length > 0)
+        {
+            int idx = currentIndex % characterSprites.Length;
+            characterImage.sprite = characterSprites[idx];
+            Debug.Log(" Р—Р°РґР°РЅРѕ character sprite index = " + idx + " (" + (characterSprites[idx] != null ? characterSprites[idx].name : "NULL SPRITE") + ")");
+        }
+        else
+        {
+            Debug.Log(" characterImage Р°Р±Рѕ characterSprites РЅРµ РіРѕС‚РѕРІС–");
+        }
+
+        // РўРµРєСЃС‚
         if (displayText != null && texts != null && texts.Length > 0)
         {
             int idx = Mathf.Clamp(currentIndex, 0, texts.Length - 1);
             displayText.text = texts[idx];
-            Debug.Log(" Задано text index = " + idx + " -> " + texts[idx]);
+            Debug.Log(" Р—Р°РґР°РЅРѕ text index = " + idx + " -> " + texts[idx]);
         }
         else if (displayText != null)
         {
             displayText.text = "no texts";
-            Debug.Log(" texts == null або порожні");
+            Debug.Log(" texts == null Р°Р±Рѕ РїРѕСЂРѕР¶РЅС–");
         }
 
-        // Анімація (опціонально)
+        // РђРЅС–РјР°С†С–СЏ (РѕРїС†С–РѕРЅР°Р»СЊРЅРѕ)
         if (targetAnimator != null && animationTriggers != null && animationTriggers.Length > 0)
         {
             int idx = Mathf.Clamp(currentIndex, 0, animationTriggers.Length - 1);
             string trigger = animationTriggers[idx];
             targetAnimator.ResetTrigger(trigger);
             targetAnimator.SetTrigger(trigger);
-            Debug.Log(" Викликано тригер: " + trigger);
+            Debug.Log(" Р’РёРєР»РёРєР°РЅРѕ С‚СЂРёРіРµСЂ: " + trigger);
         }
     }
 }
