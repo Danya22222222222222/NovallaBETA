@@ -504,13 +504,13 @@ MonoBehaviour:
   nextButton: {fileID: 1499233826}
   prevButton: {fileID: 449460429}
   sprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: e8b76dc3391bf6641a706582049e19ef, type: 3}
+  - {fileID: 21300000, guid: ff02be57f9cfd9e498a15d900fe42bd3, type: 3}
+  - {fileID: 21300000, guid: ba7c743b7e567e146b3be4367d47ade5, type: 3}
   texts:
-  - 
-  - 
-  - 
+  - "\u0431\u043B\u0430 \u0431\u043B\u0430 \u0431\u043B\u0430"
+  - "\u0431\u043B\u0435 \u0431\u043B\u0435 \u0431\u043B\u0435"
+  - "\u0431\u043B\u044E \u0431\u043B\u044E \u0431\u043B\u044E"
   animationTriggers: []
   currentIndex: 0
 --- !u!4 &644195350
@@ -798,7 +798,7 @@ GameObject:
   - component: {fileID: 1589912747}
   - component: {fileID: 1589912746}
   m_Layer: 0
-  m_Name: Prew
+  m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1179,7 +1179,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: ff78c0cea76e3cb4f9c5bdf74586d82a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
