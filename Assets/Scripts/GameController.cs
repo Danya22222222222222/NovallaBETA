@@ -20,8 +20,11 @@ public class ButtonController : MonoBehaviour
     public string[] texts;
     public string[] animationTriggers;
 
-    [Header("Група кнопок вибору слайду")]
+    [Header("Групи кнопок вибору слайду")]
     public GameObject slideSelectButtonsGroup;
+    public GameObject slideSelectButtonsGroup2;
+    public GameObject slideSelectButtonsGroup3;
+    public GameObject slideSelectButtonsGroup4;
 
     [Header("Налаштування")]
     public int currentIndex = 0;
@@ -121,10 +124,22 @@ public class ButtonController : MonoBehaviour
             Debug.Log(" Викликано тригер: " + trigger);
         }
 
-        // Показ/приховування кнопок вибору слайду
+        // Показ/приховування груп кнопок вибору слайду
         if (slideSelectButtonsGroup != null)
         {
             slideSelectButtonsGroup.SetActive(currentIndex >= 8);
+        }
+        if (slideSelectButtonsGroup2 != null)
+        {
+            slideSelectButtonsGroup2.SetActive(currentIndex >= 15);
+        }
+        if (slideSelectButtonsGroup3 != null)
+        {
+            slideSelectButtonsGroup3.SetActive(currentIndex >= 22);
+        }
+        if (slideSelectButtonsGroup4 != null)
+        {
+            slideSelectButtonsGroup4.SetActive(currentIndex >= 30);
         }
     }
 }
