@@ -20,11 +20,15 @@ public class ButtonController : MonoBehaviour
     public string[] texts;
     public string[] animationTriggers;
 
+    [Header("Група кнопок вибору слайду")]
+    public GameObject slideSelectButtonsGroup;
+
     [Header("Налаштування")]
     public int currentIndex = 0;
 
     void Start()
     {
+        currentIndex = 0; // завжди стартуємо з першого слайду
         Debug.Log("ButtonController.Start — перевірка полів...");
         Debug.Log($" backgroundImage = {(backgroundImage == null ? "NULL" : "ok")} , characterImage = {(characterImage == null ? "NULL" : "ok")}, displayText = {(displayText == null ? "NULL" : "ok")}");
         Debug.Log($" backgroundSprites.Length = {(backgroundSprites == null ? 0 : backgroundSprites.Length)}, characterSprites.Length = {(characterSprites == null ? 0 : characterSprites.Length)}, texts.Length = {(texts == null ? 0 : texts.Length)}");
@@ -54,6 +58,15 @@ public class ButtonController : MonoBehaviour
     {
         Debug.Log("OnPreviousButton натиснута. currentIndex = " + currentIndex);
         currentIndex = Mathf.Max(0, currentIndex - 1);
+        UpdateContent();
+    }
+
+    public void ShowSlide(int index)
+    {
+        Debug.Log($"ShowSlide({index}) викликано");
+        if (backgroundSprites == null || backgroundSprites.Length == 0) return;
+        if (index < 0 || index >= backgroundSprites.Length) return;
+        currentIndex = index;
         UpdateContent();
     }
 
@@ -106,6 +119,12 @@ public class ButtonController : MonoBehaviour
             targetAnimator.ResetTrigger(trigger);
             targetAnimator.SetTrigger(trigger);
             Debug.Log(" Викликано тригер: " + trigger);
+        }
+
+        // Показ/приховування кнопок вибору слайду
+        if (slideSelectButtonsGroup != null)
+        {
+            slideSelectButtonsGroup.SetActive(currentIndex >= 8);
         }
     }
 }
