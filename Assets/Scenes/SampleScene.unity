@@ -2008,6 +2008,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ff78c0cea76e3cb4f9c5bdf74586d82a, type: 3}
   - {fileID: 21300000, guid: ff78c0cea76e3cb4f9c5bdf74586d82a, type: 3}
   - {fileID: 21300000, guid: ff78c0cea76e3cb4f9c5bdf74586d82a, type: 3}
+  - {fileID: 21300000, guid: 78328b19429e0584a94dca54241022d4, type: 3}
   characterSprites:
   - {fileID: 21300000, guid: 6f87bdd95fcec764d8d68f24b5248c7f, type: 3}
   - {fileID: 21300000, guid: 7697f58224c1aac40a339c4208a1f62a, type: 3}
@@ -2019,6 +2020,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 6f87bdd95fcec764d8d68f24b5248c7f, type: 3}
   - {fileID: 21300000, guid: 6f87bdd95fcec764d8d68f24b5248c7f, type: 3}
   - {fileID: 21300000, guid: 6f87bdd95fcec764d8d68f24b5248c7f, type: 3}
+  - {fileID: 21300000, guid: 7e98b8e873cf741428980224c0e679e1, type: 3}
   - {fileID: 21300000, guid: 7e98b8e873cf741428980224c0e679e1, type: 3}
   - {fileID: 21300000, guid: 7e98b8e873cf741428980224c0e679e1, type: 3}
   - {fileID: 21300000, guid: 7e98b8e873cf741428980224c0e679e1, type: 3}
@@ -2080,6 +2082,12 @@ MonoBehaviour:
     \u043C\u0435\u043D\u0435 \u043F\u043E\u043A\u043B\u0438\u043A\u0430\u0432. \u0410
     \u043E\u0439... \u041C\u0435\u043B\u044C\u043D\u0438\u0447\u0435\u043D\u043A\u0430
     2"
+  - "\u0412\u0430\u043B\u0435\u0440\u0456\u0439                                                                                   
+    \u042F \u043D\u0435 \u043F\u0430\u043C\u2019\u044F\u0442\u0430\u044E \u044F\u043A,
+    \u0430\u043B\u0435 \u043C\u0443\u0448\u0443 \u0442\u0443\u0434\u0438. \u0412\u0456\u043D
+    \u043C\u0435\u043D\u0435 \u043F\u043E\u043A\u043B\u0438\u043A\u0430\u0432. \u0410
+    \u043E\u0439... \u041C\u0435\u043B\u044C\u043D\u0438\u0447\u0435\u043D\u043A\u0430
+    2"
   animationTriggers: []
   slideSelectButtonsGroup: {fileID: 1360870243}
   slideSelectButtonsGroupIndex: 8
@@ -2090,6 +2098,7 @@ MonoBehaviour:
   slideSelectButtonsGroup4: {fileID: 185043108}
   slideSelectButtonsGroup4Index: 0
   currentIndex: 9
+  nextSlideOverrides: 010000000200000003000000040000000500000006000000070000000800000009000000110000000b0000000c0000000d0000000e0000000f0000001000000011000000120000001300000014000000
 --- !u!1 &726908250
 GameObject:
   m_ObjectHideFlags: 0

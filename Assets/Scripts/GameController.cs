@@ -36,6 +36,10 @@ public class ButtonController : MonoBehaviour
     [Header("Налаштування")]
     public int currentIndex = 0;
 
+    [Header("Індивідуальні переходи для слайдів (опціонально)")]
+    // Якщо значення -1, то перехід стандартний (currentIndex+1). Якщо >=0, то перехід на вказаний слайд.
+    public int[] nextSlideOverrides;
+
     void Start()
     {
         currentIndex = 0; // завжди стартуємо з першого слайду
@@ -60,7 +64,13 @@ public class ButtonController : MonoBehaviour
     public void OnNextButton()
     {
         Debug.Log("OnNextButton натиснута. currentIndex = " + currentIndex);
-        currentIndex++;
+        int nextIndex = currentIndex + 1;
+        if (nextSlideOverrides != null && currentIndex < nextSlideOverrides.Length && nextSlideOverrides[currentIndex] >= 0)
+        {
+            nextIndex = nextSlideOverrides[currentIndex];
+            Debug.Log($"OnNextButton: Override! Переходимо на слайд {nextIndex}");
+        }
+        currentIndex = nextIndex;
         UpdateContent();
     }
 
