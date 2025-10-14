@@ -22,9 +22,16 @@ public class ButtonController : MonoBehaviour
 
     [Header("Групи кнопок вибору слайду")]
     public GameObject slideSelectButtonsGroup;
+    public int slideSelectButtonsGroupIndex;
+
     public GameObject slideSelectButtonsGroup2;
+    public int slideSelectButtonsGroup2Index;
+
     public GameObject slideSelectButtonsGroup3;
+    public int slideSelectButtonsGroup3Index;
+
     public GameObject slideSelectButtonsGroup4;
+    public int slideSelectButtonsGroup4Index;
 
     [Header("Налаштування")]
     public int currentIndex = 0;
@@ -127,19 +134,19 @@ public class ButtonController : MonoBehaviour
         // Показ/приховування груп кнопок вибору слайду
         if (slideSelectButtonsGroup != null)
         {
-            slideSelectButtonsGroup.SetActive(currentIndex >= 8);
+            slideSelectButtonsGroup.SetActive(currentIndex == slideSelectButtonsGroupIndex);
         }
         if (slideSelectButtonsGroup2 != null)
         {
-            slideSelectButtonsGroup2.SetActive(currentIndex >= 15);
+            slideSelectButtonsGroup2.SetActive(currentIndex == slideSelectButtonsGroup2Index);
         }
         if (slideSelectButtonsGroup3 != null)
         {
-            slideSelectButtonsGroup3.SetActive(currentIndex >= 22);
+            slideSelectButtonsGroup3.SetActive(currentIndex == slideSelectButtonsGroup3Index);
         }
         if (slideSelectButtonsGroup4 != null)
         {
-            slideSelectButtonsGroup4.SetActive(currentIndex >= 30);
+            slideSelectButtonsGroup4.SetActive(currentIndex == slideSelectButtonsGroup4Index);
         }
     }
 }

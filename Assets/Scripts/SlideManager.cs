@@ -47,4 +47,10 @@ public class SlideManager : MonoBehaviour
         int prev = (currentSlide - 1 + slides.Length) % slides.Length;
         ShowSlide(prev);
     }
+
+    public void SetSlideOnBranch(int index)
+    {
+        Debug.Log($"SetSlideOnBranch({index}) викликано");
+        ShowSlide(index);
+    }
 }
