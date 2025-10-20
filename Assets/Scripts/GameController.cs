@@ -22,12 +22,23 @@ public class ButtonController : MonoBehaviour
 
     [Header("Групи кнопок вибору слайду")]
     public GameObject slideSelectButtonsGroup;
+    public int slideSelectButtonsGroupIndex;
+
     public GameObject slideSelectButtonsGroup2;
+    public int slideSelectButtonsGroup2Index;
+
     public GameObject slideSelectButtonsGroup3;
+    public int slideSelectButtonsGroup3Index;
+
     public GameObject slideSelectButtonsGroup4;
+    public int slideSelectButtonsGroup4Index;
 
     [Header("Налаштування")]
     public int currentIndex = 0;
+
+    [Header("Індивідуальні переходи для слайдів (опціонально)")]
+    // Якщо значення -1, то перехід стандартний (currentIndex+1). Якщо >=0, то перехід на вказаний слайд.
+    public int[] nextSlideOverrides;
 
     void Start()
     {
@@ -53,7 +64,13 @@ public class ButtonController : MonoBehaviour
     public void OnNextButton()
     {
         Debug.Log("OnNextButton натиснута. currentIndex = " + currentIndex);
-        currentIndex++;
+        int nextIndex = currentIndex + 1;
+        if (nextSlideOverrides != null && currentIndex < nextSlideOverrides.Length && nextSlideOverrides[currentIndex] >= 0)
+        {
+            nextIndex = nextSlideOverrides[currentIndex];
+            Debug.Log($"OnNextButton: Override! Переходимо на слайд {nextIndex}");
+        }
+        currentIndex = nextIndex;
         UpdateContent();
     }
 
@@ -127,7 +144,19 @@ public class ButtonController : MonoBehaviour
         // Показ/приховування груп кнопок вибору слайду
         if (slideSelectButtonsGroup != null)
         {
-            slideSelectButtonsGroup.SetActive(currentIndex >= 8);
+            slideSelectButtonsGroup.SetActive(currentIndex == slideSelectButtonsGroupIndex);
+        }
+        if (slideSelectButtonsGroup2 != null)
+        {
+            slideSelectButtonsGroup2.SetActive(currentIndex == slideSelectButtonsGroup2Index);
+        }
+        if (slideSelectButtonsGroup3 != null)
+        {
+            slideSelectButtonsGroup3.SetActive(currentIndex == slideSelectButtonsGroup3Index);
+        }
+        if (slideSelectButtonsGroup4 != null)
+        {
+            slideSelectButtonsGroup4.SetActive(currentIndex == slideSelectButtonsGroup4Index);
         }
         if (slideSelectButtonsGroup2 != null)
         {
