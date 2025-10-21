@@ -2,9 +2,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class DialogueManager : MonoBehaviour
 {
+
     [Header("UI Elements")]
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI dialogueText;
@@ -38,6 +40,17 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
+        // -----------------------------------------------------------------
+        // НОВА ПЕРЕВІРКА: 
+        // Якщо ми натиснули мишкою І при цьому курсор знаходиться над кнопкою (або будь-яким UI),
+        // то нічого не робимо і виходимо з Update.
+        // -----------------------------------------------------------------
+        if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
+        {
+            return; // Ігноруємо клік, бо він був по UI
+        }
+
+        // ВАШ СТАРИЙ КОД (тепер він спрацює, тільки якщо клік був НЕ по UI)
         // Продовження діалогу натисканням миші або Space
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
@@ -189,7 +202,7 @@ public class DialogueManager : MonoBehaviour
         DisplayLine(currentLine);
     }
 
-    void ToggleAutoMode()
+    public void ToggleAutoMode()
     {
         autoMode = !autoMode;
         Debug.Log("Auto Mode: " + (autoMode ? "ON" : "OFF"));
