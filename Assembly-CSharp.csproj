@@ -62,7 +62,10 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\SlideManager.cs" />
+    <Compile Include="Assets\Scripts\Test\DialogueLine.cs" />
+    <Compile Include="Assets\Scripts\Test\ContinueIconBlink.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Test\DialogueManager.cs" />
     <Compile Include="Assets\Scripts\PauseMenu.cs" />
   </ItemGroup>
   <ItemGroup>
