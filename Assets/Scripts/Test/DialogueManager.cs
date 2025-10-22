@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
+    
 
     [Header("UI Elements")]
     public TextMeshProUGUI nameText;
