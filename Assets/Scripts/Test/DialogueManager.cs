@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -27,10 +28,21 @@ public class DialogueManager : MonoBehaviour
     public bool autoMode = false;
     public float autoDelay = 2f;
 
+    [Header("Endings (indices inside dialogueLines array)")]
+    // Публічні масиви індексів кінцівок (можеш змінити в інспекторі)
+    public int[] goodEnding = new int[] { 35, 36 };
+    public int[] badEnding = new int[] { 37, 38, 39, 40, 41, 42, 43, 44 };
+    public int[] neutralEnding = new int[] { 45, 46 };
+
     private int currentLine = 0;
     private bool isTyping = false;
     private bool canContinue = true;
     private Coroutine typingCoroutine;
+
+    // Ending state
+    private bool isPlayingEnding = false;
+    private int[] currentEnding = null;
+    private int endingPos = 0; // position inside currentEnding array
 
     void Start()
     {
@@ -40,23 +52,16 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        // -----------------------------------------------------------------
-        // НОВА ПЕРЕВІРКА: 
-        // Якщо ми натиснули мишкою І при цьому курсор знаходиться над кнопкою (або будь-яким UI),
-        // то нічого не робимо і виходимо з Update.
-        // -----------------------------------------------------------------
+        // Ignore clicks on UI
         if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
         {
-            return; // Ігноруємо клік, бо він був по UI
+            return;
         }
 
-        // ВАШ СТАРИЙ КОД (тепер він спрацює, тільки якщо клік був НЕ по UI)
-        // Продовження діалогу натисканням миші або Space
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
             if (isTyping)
             {
-                // Пропуск анімації друку
                 if (typingCoroutine != null)
                     StopCoroutine(typingCoroutine);
                 CompleteText();
@@ -67,7 +72,6 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // Авторежим
         if (Input.GetKeyDown(KeyCode.A))
         {
             ToggleAutoMode();
@@ -84,24 +88,19 @@ public class DialogueManager : MonoBehaviour
 
         DialogueLine line = dialogueLines[index];
 
-        // Встановлення фону
         if (line.background != null)
             backgroundImage.sprite = line.background;
 
-        // Встановлення персонажів
         SetCharacter(characterLeft, line.characterLeft);
         SetCharacter(characterCenter, line.characterCenter);
         SetCharacter(characterRight, line.characterRight);
 
-        // Встановлення імені
         nameText.text = line.characterName;
 
-        // Запуск друкарського ефекту
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
         typingCoroutine = StartCoroutine(TypeText(line.dialogueText));
 
-        // Вибори
         if (line.hasChoices)
         {
             ShowChoices(line);
@@ -167,6 +166,23 @@ public class DialogueManager : MonoBehaviour
 
     void NextLine()
     {
+        // If we're playing an ending, advance inside the chosen ending indices
+        if (isPlayingEnding && currentEnding != null)
+        {
+            endingPos++;
+            if (endingPos >= currentEnding.Length)
+            {
+                // After last ending line -> return to Menu
+                SceneManager.LoadScene("Menu");
+                return;
+            }
+
+            currentLine = currentEnding[endingPos];
+            DisplayLine(currentLine);
+            return;
+        }
+
+        // Normal flow
         currentLine++;
         DisplayLine(currentLine);
     }
@@ -197,6 +213,12 @@ public class DialogueManager : MonoBehaviour
 
     void OnChoiceSelected(int jumpToIndex)
     {
+        // Регіструємо вибір гравця в ScoreManager за індексом рядка, де показались варіанти
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.RegisterSlideChoice(currentLine);
+        }
+
         choicesPanel.SetActive(false);
         currentLine = jumpToIndex;
         DisplayLine(currentLine);
@@ -210,17 +232,47 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
+        // Якщо вже гра завершилась (досягли кінця основного масиву), запускаємо кінцівку на підставі рахунку
+        Debug.Log("End of main dialogue reached");
+
+        if (ScoreManager.Instance != null)
+        {
+            int score = ScoreManager.Instance.GetScore();
+
+            if (score >= 2)
+            {
+                currentEnding = goodEnding;
+            }
+            else if (score == 0)
+            {
+                currentEnding = badEnding;
+            }
+            else
+            {
+                currentEnding = neutralEnding;
+            }
+
+            if (currentEnding != null && currentEnding.Length > 0)
+            {
+                isPlayingEnding = true;
+                endingPos = 0;
+                currentLine = currentEnding[endingPos];
+                DisplayLine(currentLine);
+                return;
+            }
+        }
+
+        // Якщо ScoreManager відсутній або немає кінцівок — просто сховати діалог
         dialogueBox.SetActive(false);
-        Debug.Log("Діалог завершено");
-        // Тут можна завантажити наступну сцену або показати меню
+        Debug.Log("Dialogue ended (no ending played)");
     }
 
-    // Публічні методи для кнопок
+    // Save/Load
     public void SaveGame()
     {
         PlayerPrefs.SetInt("CurrentLine", currentLine);
         PlayerPrefs.Save();
-        Debug.Log("Гру збережено");
+        Debug.Log("Game saved");
     }
 
     public void LoadGame()
@@ -229,7 +281,7 @@ public class DialogueManager : MonoBehaviour
         {
             currentLine = PlayerPrefs.GetInt("CurrentLine");
             DisplayLine(currentLine);
-            Debug.Log("Гру завантажено");
+            Debug.Log("Game loaded");
         }
     }
 }

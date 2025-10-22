@@ -1,10 +1,16 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // Для переходу в меню
 
 public class SlideManager : MonoBehaviour
 {
     public GameObject[] slides;
 
     private int currentSlide = 0;
+
+    // Масиви слайдів для кожної кінцівки
+    public int[] goodEndingSlides = new int[] { 35, 36 };
+    public int[] badEndingSlides = new int[] { 37, 38, 39, 40, 41, 42, 43, 44 };
+    public int[] neutralEndingSlides = new int[] { 45, 46 };
 
     void Start()
     {
@@ -46,6 +52,41 @@ public class SlideManager : MonoBehaviour
         if (slides == null || slides.Length == 0) return;
         int prev = (currentSlide - 1 + slides.Length) % slides.Length;
         ShowSlide(prev);
+    }
+
+    public void PlayEnding()
+    {
+        int score = ScoreManager.Instance.GetScore();
+
+        if (score >= 2)
+        {
+            StartEnding(goodEndingSlides);
+        }
+        else if (score == 0)
+        {
+            StartEnding(badEndingSlides);
+        }
+        else
+        {
+            StartEnding(neutralEndingSlides);
+        }
+    }
+
+    private void StartEnding(int[] endingSlides)
+    {
+        StartCoroutine(PlayEndingCoroutine(endingSlides));
+    }
+
+    private System.Collections.IEnumerator PlayEndingCoroutine(int[] endingSlides)
+    {
+        foreach (int slideIndex in endingSlides)
+        {
+            ShowSlide(slideIndex);
+            yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Space));
+        }
+
+        // Повернення в меню після останнього слайду
+        SceneManager.LoadScene("Menu");
     }
 
     public void SetSlideOnBranch(int index)
