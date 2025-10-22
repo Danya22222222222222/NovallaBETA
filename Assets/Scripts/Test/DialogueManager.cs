@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
+
     
 
     [Header("UI Elements")]
@@ -25,6 +26,7 @@ public class DialogueManager : MonoBehaviour
     public DialogueLine[] dialogueLines;
 
     [Header("Settings")]
+    public int mainDialogueEndIndex = 34;
     public float typingSpeed = 0.05f;
     public bool autoMode = false;
     public float autoDelay = 2f;
@@ -34,6 +36,8 @@ public class DialogueManager : MonoBehaviour
     public int[] goodEnding = new int[] { 35, 36 };
     public int[] badEnding = new int[] { 37, 38, 39, 40, 41, 42, 43, 44 };
     public int[] neutralEnding = new int[] { 45, 46 };
+
+
 
     private int currentLine = 0;
     private bool isTyping = false;
@@ -83,7 +87,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (index >= dialogueLines.Length)
         {
-            EndDialogue();
+            Debug.LogError("Dialogue index out of range! Index: " + index);
             return;
         }
 
@@ -167,13 +171,13 @@ public class DialogueManager : MonoBehaviour
 
     void NextLine()
     {
-        // If we're playing an ending, advance inside the chosen ending indices
+        // 1. якщо ми ¬∆≈ граЇмо к≥нц≥вку, просто продовжуЇмо њњ
         if (isPlayingEnding && currentEnding != null)
         {
             endingPos++;
             if (endingPos >= currentEnding.Length)
             {
-                // After last ending line -> return to Menu
+                //  ≥нц≥вка зак≥нчилась -> в ћеню
                 SceneManager.LoadScene("Menu");
                 return;
             }
@@ -183,7 +187,16 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // Normal flow
+        // 2. ÷≈ √ќЋќ¬Ќ»… ¬»ѕ–ј¬Ћ≈Ќ»… ЅЋќ :
+        //    якщо ми Ќ≈ граЇмо к≥нц≥вку, перев≥р€Їмо, чи не час њњ почати.
+        //    ÷€ перев≥рка маЇ бути ƒќ того, €к ми перейдемо до наступноњ репл≥ки.
+        if (currentLine >= mainDialogueEndIndex)
+        {
+            EndDialogue(); // «апускаЇмо виб≥р к≥нц≥вки
+            return;        // ≤ зупин€Їмо "нормальний пот≥к"
+        }
+
+        // 3. якщо ще не час дл€ к≥нц≥вки - продовжуЇмо звичайний д≥алог
         currentLine++;
         DisplayLine(currentLine);
     }
@@ -203,7 +216,7 @@ public class DialogueManager : MonoBehaviour
 
                 int choiceIndex = i;
                 choiceButtons[i].onClick.RemoveAllListeners();
-                choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(line.choiceJumpTo[choiceIndex]));
+                choiceButtons[i].onClick.AddListener(() => OnChoiceSelected(choiceIndex));
             }
             else
             {
@@ -212,16 +225,20 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    void OnChoiceSelected(int jumpToIndex)
+    void OnChoiceSelected(int choiceIndex)
     {
-        // –ег≥струЇмо виб≥р гравц€ в ScoreManager за ≥ндексом р€дка, де показались вар≥анти
-        if (ScoreManager.Instance != null)
+        DialogueLine line = dialogueLines[currentLine];
+
+        // ƒодаЇмо бали за виб≥р
+        if (ScoreManager.Instance != null && line.choiceScores != null && choiceIndex < line.choiceScores.Length)
         {
-            ScoreManager.Instance.RegisterSlideChoice(currentLine);
+            int scoreChange = line.choiceScores[choiceIndex];
+            ScoreManager.Instance.score += scoreChange;
+            Debug.Log($"Choice made. Score change: {scoreChange}, Total score: {ScoreManager.Instance.score}");
         }
 
         choicesPanel.SetActive(false);
-        currentLine = jumpToIndex;
+        currentLine = line.choiceJumpTo[choiceIndex];
         DisplayLine(currentLine);
     }
 
@@ -233,24 +250,27 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
-        // якщо вже гра завершилась (дос€гли к≥нц€ основного масиву), запускаЇмо к≥нц≥вку на п≥дстав≥ рахунку
-        Debug.Log("End of main dialogue reached");
+        Debug.Log("End of main dialogue reached"); // ÷ей ви вже мали бачити
 
         if (ScoreManager.Instance != null)
         {
             int score = ScoreManager.Instance.GetScore();
+            Debug.Log("Final score is: " + score); // <-- Ќќ¬»… –яƒќ  1
 
             if (score >= 2)
             {
                 currentEnding = goodEnding;
+                Debug.Log("Playing Good Ending"); // <-- Ќќ¬»… –яƒќ  2
             }
-            else if (score == 0)
+            else if (score <= -1 )
             {
                 currentEnding = badEnding;
+                Debug.Log("Playing Bad Ending"); // <-- Ќќ¬»… –яƒќ  3
             }
             else
             {
                 currentEnding = neutralEnding;
+                Debug.Log("Playing Neutral Ending"); // <-- Ќќ¬»… –яƒќ  4
             }
 
             if (currentEnding != null && currentEnding.Length > 0)
