@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{B92BE098-D544-9733-AAC8-B70DAC959808}</ProjectGuid>
+    <ProjectGuid>{F6F9C97E-A129-5D67-90E9-5558FC854D1F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\SlideManager.cs" />
     <Compile Include="Assets\Scripts\Test\PauseMenu.cs" />
+    <Compile Include="Assets\Scripts\Test\AutoMode.cs" />
     <Compile Include="Assets\Scripts\Test\DialogueLine.cs" />
     <Compile Include="Assets\Scripts\Test\ContinueIconBlink.cs" />
     <Compile Include="Assets\Scripts\ScoreManager.cs" />

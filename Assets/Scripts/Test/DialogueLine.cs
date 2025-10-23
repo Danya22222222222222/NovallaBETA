@@ -23,4 +23,5 @@ public class DialogueLine
     public string[] choices;          // Текст для кнопок
     public int[] choiceJumpTo;      // На який ІНДЕКС репліки перейти
     public int[] choiceScores;       // Скільки очок дати за цей вибір
+    public int nextLine = -1;
 }
